@@ -2,7 +2,8 @@
  * Module dependencies.
  */
 
-var express = require('express')
+var conf = require("./config.js")
+  , express = require('express')
   , cons = require('consolidate')
   , routes = require('./routes')
   , speedreport = require('./routes/speedreport')
@@ -33,18 +34,18 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 //speedreport
-app.get(process.env.SPEED_BASE, speedreport.index);
-app.get(process.env.SPEED_BASE+'/report', speedreport.report);
-app.get(process.env.SPEED_BASE+'/data', speedreport.data);
-app.get(process.env.SPEED_BASE+'/list', speedreport.list);
-app.get(process.env.SPEED_BASE+'/list/data', speedreport.list);
-app.get(process.env.SPEED_BASE+'/compare', speedreport.aggregate);
-app.get(process.env.SPEED_BASE+'/compare/data', speedreport.aggregate);
+app.get(conf.SPEED_BASE, speedreport.index);
+app.get(conf.SPEED_BASE+'/report', speedreport.report);
+app.get(conf.SPEED_BASE+'/data', speedreport.data);
+app.get(conf.SPEED_BASE+'/list', speedreport.list);
+app.get(conf.SPEED_BASE+'/list/data', speedreport.list);
+app.get(conf.SPEED_BASE+'/compare', speedreport.aggregate);
+app.get(conf.SPEED_BASE+'/compare/data', speedreport.aggregate);
 //app.get('/speedreport/data2', speedreport.stream);
 //loadreport
-app.get(process.env.LOAD_BASE, loadreport.index);
-app.get(process.env.LOAD_BASE+'/:task/:format/report', loadreport.report);
-app.get(process.env.LOAD_BASE+'/:task/:format/data', loadreport.data);
+app.get(conf.LOAD_BASE, loadreport.index);
+app.get(conf.LOAD_BASE+'/:task/:format/report', loadreport.report);
+app.get(conf.LOAD_BASE+'/:task/:format/data', loadreport.data);
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

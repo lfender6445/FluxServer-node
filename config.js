@@ -1,23 +1,24 @@
 var path = require('path');
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'local';
-process.env.SPEED_BASE = '/speedreport';
-process.env.LOAD_BASE = '/loadreport';
-process.env.SPEED_SCRIPT=path.join(__dirname, '/public/javascripts/speedreport.js');
-process.env.LOAD_SCRIPT=path.join(__dirname, '/public/javascripts/loadreport.js');
-process.env.PHANTONJS_PATH = "/opt/loadreport-server/bin/phantomjs--linux-i686/bin/phantomjs";
+exports.NODE_ENV = process.env.NODE_ENV || 'local';
+exports.SPEED_BASE = '/speedreport';
+exports.LOAD_BASE = '/loadreport';
+exports.SPEED_SCRIPT=path.join(__dirname, '/reports/speedreport.js');
+exports.LOAD_SCRIPT=path.join(__dirname, '/reports/loadreport.js');
+exports.PHANTONJS_PATH = process.env.PHANTONJS_PATH||path.join(__dirname, "/bin/phantomjs--linux-i686/bin/phantomjs");
+exports.DISPLAY=process.env.DISPLAY||":99.0";
 
-if (process.env.NODE_ENV === 'local') {
-	process.env.AMQP_URL = "amqp://localhost";
-	process.env.COUCH_URL = 'http://localhost';
-	process.env.COUCH_PORT = 5984;
-} else if (process.env.NODE_ENV === 'local-multiple') {
-	process.env.AMQP_URL = "amqp://10.11.14.2";
-	process.env.COUCH_URL = 'http://10.11.14.3';
-	process.env.COUCH_PORT = 5984;
+if (exports.NODE_ENV === 'local') {
+	exports.AMQP_URL = "amqp://localhost";
+	exports.COUCH_URL = 'http://localhost';
+	exports.COUCH_PORT = 5984;
+} else if (exports.NODE_ENV === 'local-multiple') {
+	exports.AMQP_URL = "amqp://10.11.14.2";
+	exports.COUCH_URL = 'http://10.11.14.3';
+	exports.COUCH_PORT = 5984;
 }
 
-process.env.DB_DESIGN = {
+exports.DB_DESIGN = {
 	speed: [{
 			'_design/tests': {
 				normal: {
@@ -149,4 +150,3 @@ process.env.DB_DESIGN = {
 		}
 	]
 };
-console.dir(process.env);

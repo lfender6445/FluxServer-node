@@ -1,11 +1,12 @@
-var childProcess = require('child_process')
-	, binPath = process.env.PHANTONJS_PATH||'phantomjs'
+var conf = require("../config.js")
+	, childProcess = require('child_process')
+	, binPath = conf.PHANTONJS_PATH||'phantomjs'
 	, path = require('path')
 	, fs= require('fs')
 	, cradle = require('cradle')
 	, Url = require("url")
-	, db_url=Url.parse(process.env.CLOUDANT_URL||process.env.COUCH_URL)
-	, db_port=process.env.COUCH_PORT
+	, db_url=Url.parse(process.env.CLOUDANT_URL||conf.COUCH_URL)
+	, db_port=conf.COUCH_PORT
 	, temp = require('temp')
 	, util = require('util')
 
@@ -14,6 +15,8 @@ var childProcess = require('child_process')
 	, password=auth[1]||''
 	, cradle_opts={cache: true, raw: false}
 ;
+console.log("SPEED DB");
+console.dir(conf.DB_DESIGN.speed);
 if(auth!==''){
 	cradle_opts.secure=true;
 	cradle_opts.auth={ username: username, password: password };
@@ -36,8 +39,8 @@ db.exists(function (err, exists) {
 		db.create();
 	}
 	console.log('creating design docs');
-	Object.keys(process.env.DB_DESIGN.speed).forEach(function(d){
-		db.save(d, process.env.DB_DESIGN.speed[d]);
+	Object.keys(conf.DB_DESIGN.speed).forEach(function(d){
+		db.save(d, conf.DB_DESIGN.speed[d]);
 	})
 });
 var headers=['Cache-Control','Expires'];
@@ -117,7 +120,7 @@ exports.getDatabaseHandle=function(){
 exports.speedReport=function(url,task,contentType, callback){
 	task=task||'performance';
 	contentType=contentType||'json';
-	var childArgs = ["export DISPLAY=:99.0 &&", process.env.PHANTONJS_PATH, "--load-plugins=true", process.env.SPEED_SCRIPT, url];
+	var childArgs = ["export DISPLAY="+conf.DISPLAY+" &&", conf.PHANTONJS_PATH, "--load-plugins=true", conf.SPEED_SCRIPT, url];
 	// Process the data (note: error handling omitted)
 	temp.open('speedreport-', function(err, info) {
 	  if(err) console.error(err);

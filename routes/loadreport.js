@@ -1,7 +1,7 @@
 /*
  * GET home page.
  */
-var configs = require('../config'),
+var conf = require('../config'),
 	childProcess = require('child_process'),
 	path = require('path'),
 	fs = require('fs'),
@@ -9,9 +9,9 @@ var configs = require('../config'),
 	util = require('util'),
 	cradle = require('cradle'),
 	Url = require("url"),
-	binPath = process.env.PHANTONJS_PATH||'phantomjs'
-	db_url = Url.parse(process.env.CLOUDANT_URL || process.env.COUCH_URL),
-	db_port = process.env.COUCH_PORT,
+	binPath = conf.PHANTONJS_PATH||'phantomjs'
+	db_url = Url.parse(process.env.CLOUDANT_URL || conf.COUCH_URL),
+	db_port = conf.COUCH_PORT,
 	db_name = 'load',
 	auth = (db_url.auth) ? db_url.auth.split(':') : '',
 	username = auth[0] || '',
@@ -28,7 +28,7 @@ if (auth !== '') {
 	};
 	db_port = 443;
 }
-console.log('couchdb host is %s', db_url.href, cradle_opts);
+console.log('couchdb host is %s', db_url.href);
 var conn = new(cradle.Connection)(db_url.hostname, db_port, cradle_opts),
 	db = conn.database(db_name);
 
@@ -41,26 +41,27 @@ db.exists(function(err, exists) {
 		console.warn(db_name + ' database does not exists.');
 		console.log('creating database');
 		db.create();
-		if (db_name in process.env.DB_DESIGN)
-		/* populate design documents */
-		console.log('creating design docs');
-		Object.keys(process.env.DB_DESIGN[db_name]).forEach(function(d) {
-			db.save(d, process.env.DB_DESIGN[db_name][d]);
-		})
-	} else {
-		console.warn("No Database design docs for: " + db_name);
+		if (db_name in conf.DB_DESIGN){
+			/* populate design documents */
+			console.log('creating design docs');
+			Object.keys(conf.DB_DESIGN[db_name]).forEach(function(d) {
+				db.save(d, conf.DB_DESIGN[db_name][d]);
+			})
+		} else {
+			console.warn("No Database design docs for: " + db_name);
+		}
 	}
 });
 exports.index = function(req, res) {
 	res.render('index', {
 		title: 'Load Report',
-		path: process.env.LOAD_BASE+'/performance/json/data/'
+		path: conf.LOAD_BASE+'/performance/json/data/'
 	});
 };
 exports.report = function(req, res) {
 	res.render('index', {
 		title: 'Load Report',
-		path: process.env.LOAD_BASE'/performance/json/data/'
+		path: conf.LOAD_BASE+'/performance/json/data/'
 	});
 };
 exports.data = function(req, res) {
@@ -72,7 +73,7 @@ exports.data = function(req, res) {
 	if (url) {
 		//FIX: remove this hard reference
 		var childArgs = [
-			process.env.LOAD_SCRIPT, url, task, format
+			conf.LOAD_SCRIPT, url, task, format
 		];
 		//childArgs.push(info.path);
 		console.log("running \"%s\"", childArgs);
