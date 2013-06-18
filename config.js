@@ -3,9 +3,10 @@ var path = require('path');
 exports.NODE_ENV = process.env.NODE_ENV || 'local';
 exports.SPEED_BASE = '/speedreport';
 exports.LOAD_BASE = '/loadreport';
-exports.SPEED_SCRIPT=path.join(__dirname, '/reports/speedreport.js');
-exports.LOAD_SCRIPT=path.join(__dirname, '/reports/loadreport.js');
-exports.PHANTONJS_PATH = process.env.PHANTONJS_PATH||path.join(__dirname, "/bin/phantomjs--linux-i686/bin/phantomjs");
+exports.SPEED_SCRIPT=path.join(__dirname, '/reports/PhantomJS/loadreport/speedreport.js');
+exports.LOAD_SCRIPT=path.join(__dirname, '/reports/PhantomJS/loadreport/loadreport.js');
+exports.SPEED_VIEW=path.join(__dirname, '/reports/PhantomJS/loadreport/speedreport.html');
+exports.PHANTONJS_PATH = process.env.PHANTOMJS_PATH||path.join(__dirname, "/bin/phantomjs--linux-i686/bin/phantomjs");
 exports.DISPLAY=process.env.DISPLAY||":99.0";
 
 if (exports.NODE_ENV === 'local') {

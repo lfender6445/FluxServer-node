@@ -3,7 +3,7 @@
  * GET home page.
  */
 
-var configs = require('../config')
+var conf = require('../config')
 	, childProcess = require('child_process')
 	, path = require('path')
 	, fs= require('fs')
@@ -67,13 +67,13 @@ exports.report = function(req, res){
 	var url=req.param('url')
 		, id=req.param('id');
     if(id){
-		res.render('../reports/speedreport', {
+		res.render(conf.SPEED_VIEW, {
 			id: id
 			, url: url
 			, barWidth: '3px'
 		});
 	}else if(url){
-		res.render('../reports/speedreport', {
+		res.render(conf.SPEED_VIEW, {
 			url: url
 			, barWidth: '3px'
 		});
