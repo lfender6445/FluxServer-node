@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>{{ title }}</title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<link rel="stylesheet" href='/stylesheets/black-tie/jquery-ui-1.10.2.custom.min.css' />
+	<link rel="stylesheet" href="/stylesheets/validationEngine.jquery.css" type="text/css"/>
+	<style>
+		.centered{
+			margin:0 auto;
+			text-align:center;
+		}
+		.topMargin40{
+			margin-top:40%;
+		}
+	</style>
+	<script src="/javascripts/libs/jquery-1.9.1.js"></script>
+	<script src="/javascripts/libs/jquery-ui-1.10.2.custom.min.js"></script>
+	<script src="/javascripts/libs/jquery.validationEngine-en.js"></script>
+	<script src="/javascripts/libs/jquery.validationEngine.js"></script>
+  </head>
+  <body>
+  	<div style="width:100%;height:100%">
+		<h1 class="centered">Welcome to {{ title }}</h1>
+		<div class="centered">
+			<form id="test">
+				<input 
+					type="url"
+					placeholder="http://www.example.com"
+					name="url"
+					id="url"
+					class="text-input" 
+					data-validation-engine="validate[required,custom[url]]"
+					data-errormessage-custom-error="URL must be in the form: 'http://www.example.com'"/>
+				<input type="submit" id="go" value="GO"/>
+			</form>
+		</div>
+	</div>
+	<script>
+		jQuery(document).ready(function(){
+			jQuery('#test').validationEngine({promptPosition:"bottomLeft"});
+			jQuery('#test').submit(function(){
+				if(jQuery('#test').validationEngine('validate')){
+					var url=jQuery('#url').val();
+					var href="{{path}}?url="+url;
+					document.location=href;
+				}
+				return false;
+			});
+		});
+		</script>
+  </body>
+</html>
